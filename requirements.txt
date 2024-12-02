@@ -3,3 +3,4 @@ spacy
 numpy
 datasets
 huggingface_hub
+pandas
