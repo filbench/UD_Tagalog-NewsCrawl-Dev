@@ -2,3 +2,4 @@ conllu
 spacy
 numpy
 datasets
+huggingface_hub
