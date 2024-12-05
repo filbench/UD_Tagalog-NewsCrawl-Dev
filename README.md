@@ -2,7 +2,7 @@
 
 # UD_Tagalog-NewsCrawl (Dev)
 
-This repository contains the experiments and benchmarks for the [UD_Tagalog-NewsCrawl treebank](https://huggingface.co/datasets/UD-Filipino/UD_Tagalog-NewsCrawl).
+This repository contains several experiments and benchmarks for the paper [*UD-NewsCrawl: A Universal Dependencies Treebank for Tagalog*] which introduces [UD_Tagalog-NewsCrawl treebank](https://huggingface.co/datasets/UD-Filipino/UD_Tagalog-NewsCrawl), the largest Tagalog treebank to date.
 
 ## Downloading the dataset
 
