@@ -1,4 +1,4 @@
-<img src="https://cdn-avatars.huggingface.co/v1/production/uploads/634e20a0c1ce28f1de920cc4/k7SJny1M3lDa5CH_T1bp3.png" width="125" height="125" align="right" />
+<img src="https://cdn-avatars.huggingface.co/v1/production/uploads/634e20a0c1ce28f1de920cc4/k7SJny1M3lDa5CH_T1bp3.png" width="150" height="150" align="right" />
 
 # UD_Tagalog-NewsCrawl (Dev)
 
