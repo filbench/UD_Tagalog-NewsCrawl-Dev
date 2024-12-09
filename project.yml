@@ -38,6 +38,9 @@ assets:
   - dest: "assets/tlunified_raw_text.jsonl"
     description: "Pre-converted raw text from TLUnified in JSONL format (1.1 GB)."
     url: "https://storage.googleapis.com/ljvmiranda/calamanCy/tlunified_raw_text.jsonl"
+  - dest: "assets/tlunified_raw_text.txt"
+    description: "Pre-converted raw text from TLUnified in JSONL format (1.1 GB)."
+    url: "https://storage.googleapis.com/ljvmiranda/calamanCy/tlunified_raw_text.txt"
 
 commands:
   - name: "setup-training-data"
@@ -88,3 +91,51 @@ commands:
       - corpus/tl_newscrawl-ud-test.conllu
       - corpus/tl_ugnayan-ud-test.conllu
       - corpus/tl_trg-ud-test.conllu
+
+  - name: "setup-fasttext-vectors"
+    help: "Make fastText vectors spaCy compatible"
+    script:
+      - gzip -d -f assets/fasttext.tl.gz
+      - mkdir -p vectors/fasttext-tl
+      - >-
+        python -m spacy init vectors
+        tl assets/fasttext.tl vectors/fasttext-tl
+    deps:
+      - assets/fasttext.tl.gz
+    outputs:
+      - vectors/fasttext-tl
+
+  - name: "build-floret"
+    help: "Build floret binary for training fastText / floret vectors"
+    script:
+      - make -C assets/floret
+      - chmod +x assets/floret/floret
+    deps:
+      - assets/floret
+    outputs:
+      - assets/floret/floret
+
+  - name: "train-floret-vectors"
+    help: "Train floret word vectors (200 dims, 200k keys)"
+    script:
+      - mkdir -p assets/vectors/floret/
+      - >-
+        assets/floret/floret skipgram
+        -input assets/tlunified/train.txt
+        -output assets/vectors/floret/vectors
+        -dim 200
+        -minn 3
+        -maxn 5
+        -mode floret
+        -hashCount 2
+        -bucket 200000
+      - mkdir -p vectors/floret
+      - >-
+        python -m spacy init vectors
+        tl assets/vectors/floret/vectors.floret vectors/floret
+        --mode floret
+    deps:
+      - assets/floret/floret
+      - assets/tlunified/train.txt
+    outputs:
+      - vectors/floret
