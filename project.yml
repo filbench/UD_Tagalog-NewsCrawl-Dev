@@ -230,6 +230,37 @@ commands:
 
 
   - name: "train-spacy-parser-trf-xling"
-
-
+    help: "Train parser, tagger, and morph using the UD-NewsCrawl"
+    script:
+      - >-
+        python -m spacy train
+        configs/parser_trf.cfg
+        --nlp.lang ${vars.lang}
+        --output training/xling-transition/
+        --components.transformer.model.name FacebookAI/xlm-roberta-large
+        --paths.train corpus/tl_newscrawl-ud-train.spacy
+        --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/tl_newscrawl-ud-train.spacy
+      - corpus/tl_newscrawl-ud-dev.spacy
+    outputs:
+      - training/xling-transition/model-best
+    
   - name: "train-spacy-parser-trf-mono"
+    help: "Train parser, tagger, and morph using the UD-NewsCrawl"
+    script:
+      - >-
+        python -m spacy train
+        configs/parser_trf.cfg
+        --nlp.lang ${vars.lang}
+        --output training/mono-transition/
+        --components.transformer.model.name jcblaise/roberta-tagalog-large
+        --paths.train corpus/tl_newscrawl-ud-train.spacy
+        --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/tl_newscrawl-ud-train.spacy
+      - corpus/tl_newscrawl-ud-dev.spacy
+    outputs:
+      - training/mono-transition/model-best
