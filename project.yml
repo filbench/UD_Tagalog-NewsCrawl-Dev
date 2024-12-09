@@ -19,6 +19,8 @@ workflows:
     - "setup-training-data"
     - "setup-fasttext-vectors"
     - "build-floret"
+  baseline-transition:
+    - "train-spacy-parser"
   fasttext-transition:
     - "pretrain-fasttext"
     - "train-spacy-parser-fasttext"
@@ -227,7 +229,6 @@ commands:
       - corpus/tl_newscrawl-ud-dev.spacy
     outputs:
       - training/fasttext_transition/model-best
-
 
   - name: "train-spacy-parser-trf-xling"
     help: "Train parser, tagger, and morph using the UD-NewsCrawl"
