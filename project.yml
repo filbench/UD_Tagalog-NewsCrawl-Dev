@@ -3,6 +3,7 @@ title: "UD_Tagalog-NewsCrawl (Experiments)"
 
 directories:
   - "assets"
+  - "corpus"
   - "configs"
   - "packages"
   - "pretraining"

@@ -162,3 +162,8 @@ cython_debug/
 #.idea/
 .vscode
 assets/
+corpus
+packages
+pretraining
+training
+vectors
