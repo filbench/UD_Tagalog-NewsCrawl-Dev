@@ -10,4 +10,18 @@ directories:
   - "vectors"
 
 assets:
-  - 
+  - dest: assets/tl_newscrawl-ud-train.conllu
+    description: "Train dataset for NewsCrawl"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-NewsCrawl/refs/heads/dev/tl_newscrawl-ud-train.conllu
+  - dest: assets/tl_newscrawl-ud-dev.conllu
+    description: "Dev dataset for NewsCrawl"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-NewsCrawl/refs/heads/dev/tl_newscrawl-ud-dev.conllu
+  - dest: assets/tl_newscrawl-ud-test.conllu
+    description: "Test dataset for NewsCrawl"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-NewsCrawl/refs/heads/dev/tl_newscrawl-ud-test.conllu
+  - dest: assets/tl_trg-ud-test.conllu
+    description: "Test dataset for TRG"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-TRG/refs/heads/master/tl_trg-ud-test.conllu 
+  - dest: assets/tl_ugnayan-ud-test.conllu
+    description: "Test dataset for Ugnayan"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-Ugnayan/refs/heads/master/tl_ugnayan-ud-test.conllu
