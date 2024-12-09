@@ -10,6 +10,10 @@ directories:
   - "training"
   - "vectors"
 
+vars:
+  pretrain_epochs: 5
+  gpu_id: 0
+
 workflows:
   setup: 
     - "setup-training-data"
@@ -17,14 +21,15 @@ workflows:
     - "build-floret"
   fasttext-transition:
     - "pretrain-fasttext"
-    - "train-parser-fasttext"
+    - "train-spacy-parser-fasttext"
   hash-transition:
+    - "train-floret-vectors"
     - "pretrain-floret"
-    - "train-parser-floret"
+    - "train-spacy-parser-floret"
   xling-transition:
-    - "train-parser-trf-xling"
+    - "train-spacy-parser-trf-xling"
   mono-transition:
-    - "train-parser-trf-mono"
+    - "train-spacy-parser-trf-mono"
 
 assets:
   - dest: assets/tl_newscrawl-ud-train.conllu
@@ -134,7 +139,7 @@ commands:
   - name: "train-floret-vectors"
     help: "Train floret word vectors (200 dims, 200k keys)"
     script:
-      - mkdir -p assets/vectors/floret/
+      - mkdir -p assets/vectors/floret-tl/
       - >-
         assets/floret/floret skipgram
         -input assets/tlunified_raw_text.txt
@@ -148,10 +153,52 @@ commands:
       - mkdir -p vectors/floret
       - >-
         python -m spacy init vectors
-        tl assets/vectors/floret/vectors.floret vectors/floret
+        tl assets/vectors/floret/vectors.floret vectors/floret-tl
         --mode floret
     deps:
       - assets/floret/floret
       - assets/tlunified_raw_text.txt
     outputs:
-      - vectors/floret
+      - vectors/floret-tl
+
+  - name: "pretrain-fasttext"
+    help: "Pretrain with information from raw text using fastText vectors"
+    script:
+      - >-
+        python -m spacy pretrain configs/parser.cfg pretraining/init-tok2vec-fasttext/
+        --paths.raw_text assets/tlunified_raw_text.jsonl
+        --pretraining.max_epochs ${vars.pretrain_epochs}
+        --pretraining.n_save_every 1
+        --paths.vectors vectors/fasttext-tl
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - assets/tlunified_raw_text.jsonl
+      - vectors/fasttext-tl
+    outputs:
+      - pretraining/init-tok2vec-fasttext/model-last.bin
+
+  - name: "pretrain-floret"
+    script:
+      - >-
+        python -m spacy pretrain configs/parser.cfg pretraining/init-tok2vec-floret/
+        --paths.raw_text assets/tlunified_raw_text.jsonl
+        --pretraining.max_epochs ${vars.pretrain_epochs}
+        --pretraining.n_save_every 1
+        --paths.vectors vectors/floret-tl
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - assets/tlunified_raw_text.jsonl
+      - vectors/floret-tl
+    outputs:
+      - pretraining/init-tok2vec-floret/model-last.bin
+    
+  - name: "train-spacy-parser-floret"
+
+
+  - name: "train-spacy-parser-fasttext"
+
+
+  - name: "train-spacy-parser-trf-xling"
+
+
+  - name: "train-spacy-parser-trf-mono"
