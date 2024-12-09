@@ -1,0 +1,9 @@
+title: "UD_Tagalog-NewsCrawl (Experiments)"
+
+
+directories:
+  - "assets"
+  - "configs"
+  - "packages"
+  - "pretraining"
+assets:
