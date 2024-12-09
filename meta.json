@@ -1,0 +1,18 @@
+{
+    "name": "ud_newscrawl",
+    "lang": "tl",
+    "parent_package": "spacy",
+    "description": "Parsers for UD-NewsCrawl",
+    "author": "Lester James V. Miranda",
+    "email": "ljvmiranda@gmail.com",
+    "url": "https://github.com/ljvmiranda921/UD_Tagalog-NewsCrawl-Dev",
+    "license": "MIT",
+    "sources": [
+        {
+            "name": "UD_Tagalog-NewsCrawl",
+            "license": "CC BY NC",
+            "author": "Angelina A. Aquino and Lester James V. Mirand and Elsie Marie T. Or",
+            "url": "https://huggingface.co/datasets/UD-Filipino/UD_Tagalog-NewsCrawl"
+        }
+    ]
+}

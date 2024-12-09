@@ -13,6 +13,9 @@ directories:
 vars:
   pretrain_epochs: 5
   gpu_id: 0
+  # For package-and-upload command
+  model_path: ""
+  model_name: ""
 
 workflows:
   setup: 
@@ -280,3 +283,12 @@ commands:
       - corpus/tl_newscrawl-ud-dev.spacy
     outputs:
       - training/mono-transition/model-best
+
+
+  - name: "package-and-upload"
+    help: "Package a spaCy pipeline and upload to HuggingFace"
+    script:
+      - python -m spacy package ${vars.model_path} packages --build sdist,wheel --name ${vars.model_name} --meta ./meta.json
+      - python -m spacy huggingface-hub push packages/tl_${vars.model_name}/dist/tl_${vars.model_name}-py3-none-any.whl --verbose
+    deps:
+      - ${vars.model_path}
