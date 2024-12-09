@@ -253,7 +253,6 @@ commands:
       - >-
         python -m spacy train
         configs/parser_trf.cfg
-        --nlp.lang ${vars.lang}
         --output training/xling-transition/
         --components.transformer.model.name FacebookAI/xlm-roberta-large
         --paths.train corpus/tl_newscrawl-ud-train.spacy
@@ -271,7 +270,6 @@ commands:
       - >-
         python -m spacy train
         configs/parser_trf.cfg
-        --nlp.lang ${vars.lang}
         --output training/mono-transition/
         --components.transformer.model.name jcblaise/roberta-tagalog-large
         --paths.train corpus/tl_newscrawl-ud-train.spacy
