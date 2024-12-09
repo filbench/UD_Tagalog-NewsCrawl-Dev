@@ -45,6 +45,24 @@ commands:
     script:
       - >-
         python -m spacy convert 
+        assets/tl_newscrawl-ud-train.conllu corpus/
+        --converter conllu
+        --n-sents 1
+        --merge-subtokens
+      - >-
+        python -m spacy convert 
+        assets/tl_newscrawl-ud-dev.conllu corpus/
+        --converter conllu
+        --n-sents 1
+        --merge-subtokens
+      - >-
+        python -m spacy convert 
+        assets/tl_newscrawl-ud-test.conllu corpus/
+        --converter conllu
+        --n-sents 1
+        --merge-subtokens
+      - >-
+        python -m spacy convert 
         assets/tl_ugnayan-ud-test.conllu corpus/
         --converter conllu
         --n-sents 1
@@ -55,3 +73,15 @@ commands:
         --converter conllu
         --n-sents 1
         --merge-subtokens
+    deps:
+      - assets/tl_newscrawl-ud-train.conllu
+      - assets/tl_newscrawl-ud-dev.conllu
+      - assets/tl_newscrawl-ud-test.conllu
+      - assets/tl_ugnayan-ud-test.conllu
+      - assets/tl_trg-ud-test.conllu
+    outputs:
+      - corpus/tl_newscrawl-ud-train.conllu
+      - corpus/tl_newscrawl-ud-dev.conllu
+      - corpus/tl_newscrawl-ud-test.conllu
+      - corpus/tl_ugnayan-ud-test.conllu
+      - corpus/tl_trg-ud-test.conllu
