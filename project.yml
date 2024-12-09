@@ -6,4 +6,8 @@ directories:
   - "configs"
   - "packages"
   - "pretraining"
+  - "training"
+  - "vectors"
+
 assets:
+  - 

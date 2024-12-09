@@ -8,7 +8,13 @@ To get started, install all dependencies in a virtual environment:
 
 ```sh
 python3 -m venv venv
-venv/bin/pip install -r requirements.txt
+venv/bin/python3 -m pip install -r requirements.txt
+```
+
+Then download the necessary assets:
+
+```sh
+python3 -m spacy project assets
 ```
 
 ## Downloading the dataset
