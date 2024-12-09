@@ -38,3 +38,20 @@ assets:
   - dest: "assets/tlunified_raw_text.jsonl"
     description: "Pre-converted raw text from TLUnified in JSONL format (1.1 GB)."
     url: "https://storage.googleapis.com/ljvmiranda/calamanCy/tlunified_raw_text.jsonl"
+
+commands:
+  - name: "setup-training-data"
+    help: "Prepare Tagalog corpora for training and evaluating the parser"
+    script:
+      - >-
+        python -m spacy convert 
+        assets/tl_ugnayan-ud-test.conllu corpus/
+        --converter conllu
+        --n-sents 1
+        --merge-subtokens
+      - >-
+        python -m spacy convert 
+        assets/tl_trg-ud-test.conllu corpus/
+        --converter conllu
+        --n-sents 1
+        --merge-subtokens

@@ -161,7 +161,10 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 .vscode
-assets/
+
+# spaCy files
+project.lock
+assets
 corpus
 packages
 pretraining
