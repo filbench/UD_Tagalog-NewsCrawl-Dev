@@ -289,6 +289,6 @@ commands:
     help: "Package a spaCy pipeline and upload to HuggingFace"
     script:
       - python -m spacy package ${vars.model_path} packages --build sdist,wheel --name ${vars.model_name} --meta ./meta.json
-      - python -m spacy huggingface-hub push packages/tl_${vars.model_name}/dist/tl_${vars.model_name}-py3-none-any.whl --verbose
+      - python -m spacy huggingface-hub push packages/tl_${vars.model_name}-0.0.0/dist/tl_${vars.model_name}-0.0.0-py3-none-any.whl --verbose --org UD-Filipino
     deps:
       - ${vars.model_path}
