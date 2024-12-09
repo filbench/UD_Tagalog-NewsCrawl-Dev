@@ -47,31 +47,34 @@ commands:
         python -m spacy convert 
         assets/tl_newscrawl-ud-train.conllu corpus/
         --converter conllu
-        --n-sents 1
+        --morphology
         --merge-subtokens
       - >-
         python -m spacy convert 
         assets/tl_newscrawl-ud-dev.conllu corpus/
         --converter conllu
-        --n-sents 1
+        --morphology
         --merge-subtokens
       - >-
         python -m spacy convert 
         assets/tl_newscrawl-ud-test.conllu corpus/
         --converter conllu
         --n-sents 1
+        --morphology
         --merge-subtokens
       - >-
         python -m spacy convert 
         assets/tl_ugnayan-ud-test.conllu corpus/
         --converter conllu
         --n-sents 1
+        --morphology
         --merge-subtokens
       - >-
         python -m spacy convert 
         assets/tl_trg-ud-test.conllu corpus/
         --converter conllu
         --n-sents 1
+        --morphology
         --merge-subtokens
     deps:
       - assets/tl_newscrawl-ud-train.conllu
