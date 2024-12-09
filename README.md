@@ -33,6 +33,7 @@ We use the [spaCy projects](https://spacy.io/usage/projects) framework to manage
 You can train a model by passing a model ID (we'll explain) later to the following command:
 
 ```sh
+spacy project run setup  # run this once
 spacy project run <MODEL-ID>
 ```
 

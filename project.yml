@@ -10,6 +10,22 @@ directories:
   - "training"
   - "vectors"
 
+workflows:
+  setup: 
+    - "setup-training-data"
+    - "setup-fasttext-vectors"
+    - "build-floret"
+  fasttext-transition:
+    - "pretrain-fasttext"
+    - "train-parser-fasttext"
+  hash-transition:
+    - "pretrain-floret"
+    - "train-parser-floret"
+  xling-transition:
+    - "train-parser-trf-xling"
+  mono-transition:
+    - "train-parser-trf-mono"
+
 assets:
   - dest: assets/tl_newscrawl-ud-train.conllu
     description: "Train dataset for NewsCrawl"
