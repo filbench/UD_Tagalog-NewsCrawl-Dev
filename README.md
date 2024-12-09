@@ -19,7 +19,7 @@ python3 -m spacy project assets
 ```
 
 This will create an `assets/` directory and contain important data files, especially the train, dev, and test splits for UD-NewsCrawl.
-Note that the dataset is also available in HuggingFace (but for our purposes we'll use the original CoNLL-U files):
+Note that the dataset is also available in [HuggingFace](https://huggingface.co/datasets/UD-Filipino/UD_Tagalog-NewsCrawl) (but for our purposes we'll use the orig files):
 
 ```python
 # pip install datasets
