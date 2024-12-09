@@ -4,28 +4,22 @@
 
 This repository contains several experiments and benchmarks for the paper [_UD-NewsCrawl: A Universal Dependencies Treebank for Tagalog_]() which introduces [UD_Tagalog-NewsCrawl](https://huggingface.co/datasets/UD-Filipino/UD_Tagalog-NewsCrawl), the largest Tagalog treebank to date.
 
-To get started, install all dependencies in a virtual environment:
+
+
+## Set-up
+
+To get started, install all dependencies in a virtual environment and download all assets:
 
 ```sh
 python3 -m venv venv
-venv/bin/python3 -m pip install -r requirements.txt
-```
-
-Then download the necessary assets:
-
-```sh
+source venv/bin/activate
+# Within the virtual environment
+python3 -m pip install -r requirements.txt
 python3 -m spacy project assets
 ```
 
-## Downloading the dataset
-
-The dataset is available as a set of CoNLL-U files which can be downloaded directly from Universal Dependencies:
-
-```sh
-bash utils/download_conllu.sh dev
-```
-
-You can also download it as a HuggingFace dataset:
+This will create an `assets/` directory and contain important data files, especially the train, dev, and test splits for UD-NewsCrawl.
+Note that the dataset is also available in HuggingFace (but for our purposes we'll use the original CoNLL-U files):
 
 ```python
 # pip install datasets
