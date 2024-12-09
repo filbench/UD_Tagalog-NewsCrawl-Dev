@@ -4,3 +4,4 @@ numpy
 datasets
 huggingface_hub
 pandas
+spacy-transformers

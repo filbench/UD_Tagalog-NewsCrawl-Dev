@@ -194,6 +194,23 @@ commands:
     outputs:
       - pretraining/init-tok2vec-floret/model-last.bin
     
+  - name: "train-spacy-parser"
+    help: "Train parser, tagger, and morph using the UD-NewsCrawl"
+    script:
+      - >-
+        python -m spacy train
+        configs/parser.cfg
+        --output training/spacy_baseline/
+        --nlp.lang tl
+        --paths.train corpus/tl_newscrawl-ud-train.spacy
+        --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/tl_newscrawl-ud-train.spacy
+      - corpus/tl_newscrawl-ud-dev.spacy
+    outputs:
+      - training/spacy_baseline/model-best
+
   - name: "train-spacy-parser-floret"
     help: "Train parser, tagger, and morph using the UD-NewsCrawl"
     script:
