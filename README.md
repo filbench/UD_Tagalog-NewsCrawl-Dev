@@ -36,7 +36,7 @@ You can train a model by passing a model ID (we'll explain) later to the followi
 spacy project run <MODEL-ID>
 ```
 
-There are six (6) models as outlined in our paper:
+There are six (6) models as outlined in our paper. They are also available in this [HuggingFace collection]():
 
 | ID                  | Description                                                                                            |
 |---------------------|--------------------------------------------------------------------------------------------------------|
