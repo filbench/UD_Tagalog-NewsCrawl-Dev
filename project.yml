@@ -121,7 +121,7 @@ commands:
       - mkdir -p assets/vectors/floret/
       - >-
         assets/floret/floret skipgram
-        -input assets/tlunified/train.txt
+        -input assets/tlunified_raw_text.txt
         -output assets/vectors/floret/vectors
         -dim 200
         -minn 3
@@ -136,6 +136,6 @@ commands:
         --mode floret
     deps:
       - assets/floret/floret
-      - assets/tlunified/train.txt
+      - assets/tlunified_raw_text.txt
     outputs:
       - vectors/floret
