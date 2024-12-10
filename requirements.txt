@@ -1,6 +1,10 @@
 conllu
-spacy
+spacy==3.8
 numpy
 datasets
 huggingface_hub
 pandas
+spacy-transformers
+cupy
+spacy-huggingface-hub
+build

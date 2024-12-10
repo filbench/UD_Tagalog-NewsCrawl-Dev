@@ -1,0 +1,294 @@
+title: "UD_Tagalog-NewsCrawl (Experiments)"
+
+
+directories:
+  - "assets"
+  - "corpus"
+  - "configs"
+  - "packages"
+  - "pretraining"
+  - "training"
+  - "vectors"
+
+vars:
+  pretrain_epochs: 5
+  gpu_id: 0
+  # For package-and-upload command
+  model_path: ""
+  model_name: ""
+
+workflows:
+  setup: 
+    - "setup-training-data"
+    - "setup-fasttext-vectors"
+    - "build-floret"
+  baseline-transition:
+    - "train-spacy-parser"
+  fasttext-transition:
+    - "pretrain-fasttext"
+    - "train-spacy-parser-fasttext"
+  hash-transition:
+    - "train-floret-vectors"
+    - "pretrain-floret"
+    - "train-spacy-parser-floret"
+  xling-transition:
+    - "train-spacy-parser-trf-xling"
+  mono-transition:
+    - "train-spacy-parser-trf-mono"
+
+assets:
+  - dest: assets/tl_newscrawl-ud-train.conllu
+    description: "Train dataset for NewsCrawl"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-NewsCrawl/refs/heads/dev/tl_newscrawl-ud-train.conllu
+  - dest: assets/tl_newscrawl-ud-dev.conllu
+    description: "Dev dataset for NewsCrawl"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-NewsCrawl/refs/heads/dev/tl_newscrawl-ud-dev.conllu
+  - dest: assets/tl_newscrawl-ud-test.conllu
+    description: "Test dataset for NewsCrawl"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-NewsCrawl/refs/heads/dev/tl_newscrawl-ud-test.conllu
+  - dest: assets/tl_trg-ud-test.conllu
+    description: "Test dataset for TRG"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-TRG/refs/heads/master/tl_trg-ud-test.conllu 
+  - dest: assets/tl_ugnayan-ud-test.conllu
+    description: "Test dataset for Ugnayan"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-Ugnayan/refs/heads/master/tl_ugnayan-ud-test.conllu
+  - dest: "assets/fasttext.tl.gz"
+    description: "Tagalog fastText vectors provided from the fastText website (trained from CommonCrawl and Wikipedia)."
+    url: "https://dl.fbaipublicfiles.com/fasttext/vectors-crawl/cc.tl.300.vec.gz"
+  - dest: "assets/floret"
+    description: "Floret repository for training floret and fastText models."
+    git:
+      repo: "https://github.com/explosion/floret"
+      branch: "main"
+      path: ""
+  - dest: "assets/tlunified_raw_text.jsonl"
+    description: "Pre-converted raw text from TLUnified in JSONL format (1.1 GB)."
+    url: "https://storage.googleapis.com/ljvmiranda/calamanCy/tlunified_raw_text.jsonl"
+  - dest: "assets/tlunified_raw_text.txt"
+    description: "Pre-converted raw text from TLUnified in JSONL format (1.1 GB)."
+    url: "https://storage.googleapis.com/ljvmiranda/calamanCy/tlunified_raw_text.txt"
+
+commands:
+  - name: "setup-training-data"
+    help: "Prepare Tagalog corpora for training and evaluating the parser"
+    script:
+      - >-
+        python -m spacy convert 
+        assets/tl_newscrawl-ud-train.conllu corpus/
+        --converter conllu
+        --morphology
+        --merge-subtokens
+      - >-
+        python -m spacy convert 
+        assets/tl_newscrawl-ud-dev.conllu corpus/
+        --converter conllu
+        --morphology
+        --merge-subtokens
+      - >-
+        python -m spacy convert 
+        assets/tl_newscrawl-ud-test.conllu corpus/
+        --converter conllu
+        --n-sents 1
+        --morphology
+        --merge-subtokens
+      - >-
+        python -m spacy convert 
+        assets/tl_ugnayan-ud-test.conllu corpus/
+        --converter conllu
+        --n-sents 1
+        --morphology
+        --merge-subtokens
+      - >-
+        python -m spacy convert 
+        assets/tl_trg-ud-test.conllu corpus/
+        --converter conllu
+        --n-sents 1
+        --morphology
+        --merge-subtokens
+    deps:
+      - assets/tl_newscrawl-ud-train.conllu
+      - assets/tl_newscrawl-ud-dev.conllu
+      - assets/tl_newscrawl-ud-test.conllu
+      - assets/tl_ugnayan-ud-test.conllu
+      - assets/tl_trg-ud-test.conllu
+    outputs:
+      - corpus/tl_newscrawl-ud-train.conllu
+      - corpus/tl_newscrawl-ud-dev.conllu
+      - corpus/tl_newscrawl-ud-test.conllu
+      - corpus/tl_ugnayan-ud-test.conllu
+      - corpus/tl_trg-ud-test.conllu
+
+  - name: "setup-fasttext-vectors"
+    help: "Make fastText vectors spaCy compatible"
+    script:
+      - gzip -d -f assets/fasttext.tl.gz
+      - mkdir -p vectors/fasttext-tl
+      - >-
+        python -m spacy init vectors
+        tl assets/fasttext.tl vectors/fasttext-tl
+    deps:
+      - assets/fasttext.tl.gz
+    outputs:
+      - vectors/fasttext-tl
+
+  - name: "build-floret"
+    help: "Build floret binary for training fastText / floret vectors"
+    script:
+      - make -C assets/floret
+      - chmod +x assets/floret/floret
+    deps:
+      - assets/floret
+    outputs:
+      - assets/floret/floret
+
+  - name: "train-floret-vectors"
+    help: "Train floret word vectors (200 dims, 200k keys)"
+    script:
+      - mkdir -p assets/vectors/floret-tl/
+      - >-
+        assets/floret/floret skipgram
+        -input assets/tlunified_raw_text.txt
+        -output assets/vectors/floret/vectors
+        -dim 200
+        -minn 3
+        -maxn 5
+        -mode floret
+        -hashCount 2
+        -bucket 200000
+      - mkdir -p vectors/floret
+      - >-
+        python -m spacy init vectors
+        tl assets/vectors/floret/vectors.floret vectors/floret-tl
+        --mode floret
+    deps:
+      - assets/floret/floret
+      - assets/tlunified_raw_text.txt
+    outputs:
+      - vectors/floret-tl
+
+  - name: "pretrain-fasttext"
+    help: "Pretrain with information from raw text using fastText vectors"
+    script:
+      - >-
+        python -m spacy pretrain configs/parser.cfg pretraining/init-tok2vec-fasttext/
+        --paths.raw_text assets/tlunified_raw_text.jsonl
+        --pretraining.max_epochs ${vars.pretrain_epochs}
+        --pretraining.n_save_every 1
+        --paths.vectors vectors/fasttext-tl
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - assets/tlunified_raw_text.jsonl
+      - vectors/fasttext-tl
+    outputs:
+      - pretraining/init-tok2vec-fasttext/model-last.bin
+
+  - name: "pretrain-floret"
+    script:
+      - >-
+        python -m spacy pretrain configs/parser.cfg pretraining/init-tok2vec-floret/
+        --paths.raw_text assets/tlunified_raw_text.jsonl
+        --pretraining.max_epochs ${vars.pretrain_epochs}
+        --pretraining.n_save_every 1
+        --paths.vectors vectors/floret-tl
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - assets/tlunified_raw_text.jsonl
+      - vectors/floret-tl
+    outputs:
+      - pretraining/init-tok2vec-floret/model-last.bin
+    
+  - name: "train-spacy-parser"
+    help: "Train parser, tagger, and morph using the UD-NewsCrawl"
+    script:
+      - >-
+        python -m spacy train
+        configs/parser.cfg
+        --output training/spacy_baseline/
+        --nlp.lang tl
+        --paths.train corpus/tl_newscrawl-ud-train.spacy
+        --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/tl_newscrawl-ud-train.spacy
+      - corpus/tl_newscrawl-ud-dev.spacy
+    outputs:
+      - training/spacy_baseline/model-best
+
+  - name: "train-spacy-parser-floret"
+    help: "Train parser, tagger, and morph using the UD-NewsCrawl"
+    script:
+      - >-
+        python -m spacy train
+        configs/parser.cfg
+        --output training/hash_transition/
+        --nlp.lang tl
+        --paths.train corpus/tl_newscrawl-ud-train.spacy
+        --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --paths.vectors vectors/floret-tl
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/tl_newscrawl-ud-train.spacy
+      - corpus/tl_newscrawl-ud-dev.spacy
+    outputs:
+      - training/hash_transition/model-best
+
+  - name: "train-spacy-parser-fasttext"
+    help: "Train parser, tagger, and morph using the UD-NewsCrawl"
+    script:
+      - >-
+        python -m spacy train
+        configs/parser.cfg
+        --output training/fasttext_transition/
+        --nlp.lang tl
+        --paths.train corpus/tl_newscrawl-ud-train.spacy
+        --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --paths.vectors vectors/fasttext-tl
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/tl_newscrawl-ud-train.spacy
+      - corpus/tl_newscrawl-ud-dev.spacy
+    outputs:
+      - training/fasttext_transition/model-best
+
+  - name: "train-spacy-parser-trf-xling"
+    help: "Train parser, tagger, and morph using the UD-NewsCrawl"
+    script:
+      - >-
+        python -m spacy train
+        configs/parser_trf.cfg
+        --output training/xling-transition/
+        --components.transformer.model.name FacebookAI/xlm-roberta-large
+        --paths.train corpus/tl_newscrawl-ud-train.spacy
+        --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/tl_newscrawl-ud-train.spacy
+      - corpus/tl_newscrawl-ud-dev.spacy
+    outputs:
+      - training/xling-transition/model-best
+    
+  - name: "train-spacy-parser-trf-mono"
+    help: "Train parser, tagger, and morph using the UD-NewsCrawl"
+    script:
+      - >-
+        python -m spacy train
+        configs/parser_trf.cfg
+        --output training/mono-transition/
+        --components.transformer.model.name jcblaise/roberta-tagalog-large
+        --paths.train corpus/tl_newscrawl-ud-train.spacy
+        --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --gpu-id ${vars.gpu_id}
+    deps:
+      - corpus/tl_newscrawl-ud-train.spacy
+      - corpus/tl_newscrawl-ud-dev.spacy
+    outputs:
+      - training/mono-transition/model-best
+
+
+  - name: "package-and-upload"
+    help: "Package a spaCy pipeline and upload to HuggingFace"
+    script:
+      - python -m spacy package ${vars.model_path} packages --build sdist,wheel --name ${vars.model_name} --meta ./meta.json --force
+      - python -m spacy huggingface-hub push packages/tl_${vars.model_name}-0.0.0/dist/tl_${vars.model_name}-0.0.0-py3-none-any.whl --verbose --org UD-Filipino
+    deps:
+      - ${vars.model_path}
