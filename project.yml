@@ -10,7 +10,7 @@ directories:
   - "vectors"
 
 vars:
-  pretrain_epochs: 1
+  pretrain_epochs: 3
   gpu_id: 0
   # For package-and-upload command
   model_path: ""
