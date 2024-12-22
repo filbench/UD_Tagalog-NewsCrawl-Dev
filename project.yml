@@ -10,7 +10,7 @@ directories:
   - "vectors"
 
 vars:
-  pretrain_epochs: 5
+  pretrain_epochs: 1
   gpu_id: 0
   # For package-and-upload command
   model_path: ""
@@ -24,11 +24,11 @@ workflows:
   baseline-transition:
     - "train-spacy-parser"
   fasttext-transition:
-    - "pretrain-fasttext"
+    - "pretrain"
     - "train-spacy-parser-fasttext"
   hash-transition:
     - "train-floret-vectors"
-    - "pretrain-floret"
+    - "pretrain"
     - "train-spacy-parser-floret"
   xling-transition:
     - "train-spacy-parser-trf-xling"
@@ -165,36 +165,20 @@ commands:
     outputs:
       - vectors/floret-tl
 
-  - name: "pretrain-fasttext"
-    help: "Pretrain with information from raw text using fastText vectors"
+  - name: "pretrain"
+    help: "Pretrain with information from raw text"
     script:
       - >-
-        python -m spacy pretrain configs/parser.cfg pretraining/init-tok2vec-fasttext/
+        python -m spacy pretrain configs/parser.cfg pretraining/
         --paths.raw_text assets/tlunified_raw_text.jsonl
         --pretraining.max_epochs ${vars.pretrain_epochs}
         --pretraining.n_save_every 1
-        --paths.vectors vectors/fasttext-tl
         --gpu-id ${vars.gpu_id}
     deps:
       - assets/tlunified_raw_text.jsonl
       - vectors/fasttext-tl
     outputs:
-      - pretraining/init-tok2vec-fasttext/model-last.bin
-
-  - name: "pretrain-floret"
-    script:
-      - >-
-        python -m spacy pretrain configs/parser.cfg pretraining/init-tok2vec-floret/
-        --paths.raw_text assets/tlunified_raw_text.jsonl
-        --pretraining.max_epochs ${vars.pretrain_epochs}
-        --pretraining.n_save_every 1
-        --paths.vectors vectors/floret-tl
-        --gpu-id ${vars.gpu_id}
-    deps:
-      - assets/tlunified_raw_text.jsonl
-      - vectors/floret-tl
-    outputs:
-      - pretraining/init-tok2vec-floret/model-last.bin
+      - pretraining/model-last.bin
 
   - name: "train-spacy-parser"
     help: "Train parser, tagger, and morph using the UD-NewsCrawl"
@@ -223,7 +207,7 @@ commands:
         --nlp.lang tl
         --paths.train corpus/tl_newscrawl-ud-train.spacy
         --paths.dev corpus/tl_newscrawl-ud-dev.spacy
-        --initialize.init_tok2vec pretraining/init-tok2vec-floret/model-last.bin
+        --initialize.init_tok2vec pretraining/model-last.bin
         --paths.vectors vectors/floret-tl
         --gpu-id ${vars.gpu_id}
     deps:
@@ -242,7 +226,7 @@ commands:
         --nlp.lang tl
         --paths.train corpus/tl_newscrawl-ud-train.spacy
         --paths.dev corpus/tl_newscrawl-ud-dev.spacy
-        --initialize.init_tok2vec pretraining/init-tok2vec-fasttext/model-last.bin
+        --initialize.init_tok2vec pretraining/model-last.bin
         --paths.vectors vectors/fasttext-tl
         --gpu-id ${vars.gpu_id}
     deps:
