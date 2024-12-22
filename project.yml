@@ -176,7 +176,6 @@ commands:
         --gpu-id ${vars.gpu_id}
     deps:
       - assets/tlunified_raw_text.jsonl
-      - vectors/fasttext-tl
     outputs:
       - pretraining/model-last.bin
 
