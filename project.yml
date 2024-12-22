@@ -1,6 +1,5 @@
 title: "UD_Tagalog-NewsCrawl (Experiments)"
 
-
 directories:
   - "assets"
   - "corpus"
@@ -18,7 +17,7 @@ vars:
   model_name: ""
 
 workflows:
-  setup: 
+  setup:
     - "setup-training-data"
     - "setup-fasttext-vectors"
     - "build-floret"
@@ -48,7 +47,7 @@ assets:
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-NewsCrawl/refs/heads/dev/tl_newscrawl-ud-test.conllu
   - dest: assets/tl_trg-ud-test.conllu
     description: "Test dataset for TRG"
-    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-TRG/refs/heads/master/tl_trg-ud-test.conllu 
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-TRG/refs/heads/master/tl_trg-ud-test.conllu
   - dest: assets/tl_ugnayan-ud-test.conllu
     description: "Test dataset for Ugnayan"
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Tagalog-Ugnayan/refs/heads/master/tl_ugnayan-ud-test.conllu
@@ -196,7 +195,7 @@ commands:
       - vectors/floret-tl
     outputs:
       - pretraining/init-tok2vec-floret/model-last.bin
-    
+
   - name: "train-spacy-parser"
     help: "Train parser, tagger, and morph using the UD-NewsCrawl"
     script:
@@ -224,6 +223,7 @@ commands:
         --nlp.lang tl
         --paths.train corpus/tl_newscrawl-ud-train.spacy
         --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --initialize.init_tok2vec pretraining/init-tok2vec-floret/model-last.bin
         --paths.vectors vectors/floret-tl
         --gpu-id ${vars.gpu_id}
     deps:
@@ -242,6 +242,7 @@ commands:
         --nlp.lang tl
         --paths.train corpus/tl_newscrawl-ud-train.spacy
         --paths.dev corpus/tl_newscrawl-ud-dev.spacy
+        --initialize.init_tok2vec pretraining/init-tok2vec-fasttext/model-last.bin
         --paths.vectors vectors/fasttext-tl
         --gpu-id ${vars.gpu_id}
     deps:
@@ -266,7 +267,7 @@ commands:
       - corpus/tl_newscrawl-ud-dev.spacy
     outputs:
       - training/xling-transition/model-best
-    
+
   - name: "train-spacy-parser-trf-mono"
     help: "Train parser, tagger, and morph using the UD-NewsCrawl"
     script:
@@ -283,7 +284,6 @@ commands:
       - corpus/tl_newscrawl-ud-dev.spacy
     outputs:
       - training/mono-transition/model-best
-
 
   - name: "package-and-upload"
     help: "Package a spaCy pipeline and upload to HuggingFace"
