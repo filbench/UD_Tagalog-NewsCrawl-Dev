@@ -5,6 +5,6 @@ datasets
 huggingface_hub
 pandas
 spacy-transformers
-cupy
+cupy-cuda113
 spacy-huggingface-hub
 build
