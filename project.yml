@@ -24,11 +24,9 @@ workflows:
   baseline-transition:
     - "train-spacy-parser"
   fasttext-transition:
-    - "pretrain"
     - "train-spacy-parser-fasttext"
   hash-transition:
     - "train-floret-vectors"
-    - "pretrain"
     - "train-spacy-parser-floret"
   xling-transition:
     - "train-spacy-parser-trf-xling"
@@ -165,19 +163,19 @@ commands:
     outputs:
       - vectors/floret-tl
 
-  - name: "pretrain"
-    help: "Pretrain with information from raw text"
-    script:
-      - >-
-        python -m spacy pretrain configs/parser.cfg pretraining/
-        --paths.raw_text assets/tlunified_raw_text.jsonl
-        --pretraining.max_epochs ${vars.pretrain_epochs}
-        --pretraining.n_save_every 1
-        --gpu-id ${vars.gpu_id}
-    deps:
-      - assets/tlunified_raw_text.jsonl
-    outputs:
-      - pretraining/model-last.bin
+  # - name: "pretrain"
+  #   help: "Pretrain with information from raw text"
+  #   script:
+  #     - >-
+  #       python -m spacy pretrain configs/parser.cfg pretraining/
+  #       --paths.raw_text assets/tlunified_raw_text.jsonl
+  #       --pretraining.max_epochs ${vars.pretrain_epochs}
+  #       --pretraining.n_save_every 1
+  #       --gpu-id ${vars.gpu_id}
+  #   deps:
+  #     - assets/tlunified_raw_text.jsonl
+  #   outputs:
+  #     - pretraining/model-last.bin
 
   - name: "train-spacy-parser"
     help: "Train parser, tagger, and morph using the UD-NewsCrawl"
@@ -206,7 +204,6 @@ commands:
         --nlp.lang tl
         --paths.train corpus/tl_newscrawl-ud-train.spacy
         --paths.dev corpus/tl_newscrawl-ud-dev.spacy
-        --initialize.init_tok2vec pretraining/model-last.bin
         --paths.vectors vectors/floret-tl
         --gpu-id ${vars.gpu_id}
     deps:
@@ -225,7 +222,6 @@ commands:
         --nlp.lang tl
         --paths.train corpus/tl_newscrawl-ud-train.spacy
         --paths.dev corpus/tl_newscrawl-ud-dev.spacy
-        --initialize.init_tok2vec pretraining/model-last.bin
         --paths.vectors vectors/fasttext-tl
         --gpu-id ${vars.gpu_id}
     deps:
