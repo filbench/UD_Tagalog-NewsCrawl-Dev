@@ -8,3 +8,4 @@ spacy-transformers
 cupy-cuda113
 spacy-huggingface-hub
 build
+pip==22.0.2
