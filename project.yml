@@ -155,7 +155,7 @@ commands:
       - mkdir -p vectors/floret
       - >-
         python -m spacy init vectors
-        tl assets/vectors/floret/vectors.floret vectors/floret-tl
+        tl assets/vectors/floret-tl/vectors.floret vectors/floret-tl
         --mode floret
     deps:
       - assets/floret/floret
