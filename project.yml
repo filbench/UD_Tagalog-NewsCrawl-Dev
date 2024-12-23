@@ -145,7 +145,7 @@ commands:
       - >-
         assets/floret/floret skipgram
         -input assets/tlunified_raw_text.txt
-        -output assets/vectors/floret/vectors
+        -output assets/vectors/floret-tl/vectors
         -dim 200
         -minn 3
         -maxn 5
