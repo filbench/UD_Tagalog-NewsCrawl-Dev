@@ -18,6 +18,7 @@ vars:
   # For package-and-upload command
   model_path: ""
   model_name: ""
+  hf_user: "UD-Filipino"
 
 workflows:
   setup:
@@ -292,7 +293,7 @@ commands:
     script:
       - >-
         python -m pip install 
-        https://huggingface.co/UD-Filipino/${vars.model_name}/resolve/main/${vars.model_name}-any-py3-none-any.whl
+        https://huggingface.co/${vars.hf_user}/${vars.model_name}/resolve/main/${vars.model_name}-any-py3-none-any.whl
       - >-
         python -m spacy evaluate
         ${vars.model_name} corpus/tl_newscrawl-ud-test.spacy
@@ -309,7 +310,7 @@ commands:
     script:
       - >-
         python -m pip install 
-        https://huggingface.co/UD-Filipino/${vars.model_name}/resolve/main/${vars.model_name}-any-py3-none-any.whl
+        https://huggingface.co/${vars.hf_user}/${vars.model_name}/resolve/main/${vars.model_name}-any-py3-none-any.whl
       - >-
         python -m spacy evaluate
         ${vars.model_name} corpus/tl_ugnayan-ud-test.spacy
