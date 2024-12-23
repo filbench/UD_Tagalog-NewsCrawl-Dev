@@ -37,7 +37,7 @@ spacy project run setup  # run this once
 spacy project run <MODEL-ID>
 ```
 
-There are six (6) models as outlined in our paper. They are also available in this [HuggingFace collection]():
+There are six (6) models as outlined in our paper. They are also available in this [HuggingFace collection](https://huggingface.co/collections/UD-Filipino/universal-dependencies-for-tagalog-67573d625baa5036fd59b317):
 
 | ID                  | Description                                                                                            |
 |---------------------|--------------------------------------------------------------------------------------------------------|
