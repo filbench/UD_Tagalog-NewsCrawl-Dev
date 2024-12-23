@@ -5,6 +5,7 @@ directories:
   - "corpus"
   - "configs"
   - "packages"
+  - "metrics"
   - "pretraining"
   - "training"
   - "vectors"
@@ -263,6 +264,23 @@ commands:
       - corpus/tl_newscrawl-ud-dev.spacy
     outputs:
       - training/mono-transition/model-best
+
+  - name: "evaluate-spacy"
+    help: "Evaluate a spaCy model uploaded to HuggingFace"
+    script:
+      - >-
+        python -m pip install 
+        https://huggingface.co/UD-Filipino/${vars.model_name}/resolve/main/${vars.model_name}-any-py3-none-any.whl
+      - >-
+        python -m spacy evaluate
+        ${vars.model_name} corpus/tl_newscrawl-ud-test.spacy
+        --output metrics/${vars.model_name}.json
+        --gpu-id ${vars.gpu_id}
+        --per-component
+    deps:
+      - corpus/tl_newscrawl-ud-test.spacy
+    outputs:
+      - metrics/${vars.model_name}.json
 
   - name: "package-and-upload"
     help: "Package a spaCy pipeline and upload to HuggingFace"
