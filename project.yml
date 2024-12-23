@@ -6,6 +6,8 @@ directories:
   - "configs"
   - "packages"
   - "metrics"
+  - "metrics/trg"
+  - "metrics/ugnayan"
   - "pretraining"
   - "training"
   - "vectors"
@@ -33,6 +35,9 @@ workflows:
     - "train-spacy-parser-trf-xling"
   mono-transition:
     - "train-spacy-parser-trf-mono"
+  evaluate:
+    - "evaluate-spacy"
+    - "evaluate-old"
 
 assets:
   - dest: assets/tl_newscrawl-ud-train.conllu
@@ -283,7 +288,7 @@ commands:
       - training/mono-transition/model-best
 
   - name: "evaluate-spacy"
-    help: "Evaluate a spaCy model uploaded to HuggingFace"
+    help: "Evaluate a spaCy model uploaded to HuggingFace to the test split"
     script:
       - >-
         python -m pip install 
@@ -298,6 +303,31 @@ commands:
       - corpus/tl_newscrawl-ud-test.spacy
     outputs:
       - metrics/${vars.model_name}.json
+
+  - name: "evaluate-old"
+    help: "Evaluate a spaCy model uploaded to HuggingFace to previous treebanks"
+    script:
+      - >-
+        python -m pip install 
+        https://huggingface.co/UD-Filipino/${vars.model_name}/resolve/main/${vars.model_name}-any-py3-none-any.whl
+      - >-
+        python -m spacy evaluate
+        ${vars.model_name} corpus/tl_ugnayan-ud-test.spacy
+        --output metrics/ugnayan/${vars.model_name}.json
+        --gpu-id ${vars.gpu_id}
+        --per-component
+      - >-
+        python -m spacy evaluate
+        ${vars.model_name} corpus/tl_trg-ud-test.spacy
+        --output metrics/trg/${vars.model_name}.json
+        --gpu-id ${vars.gpu_id}
+        --per-component
+    deps:
+      - corpus/tl_ugnayan-ud-test.spacy
+      - corpus/tl_trg-ud-test.spacy
+    outputs:
+      - metrics/ugnayan/${vars.model_name}.json
+      - metrics/trg/${vars.model_name}.json
 
   - name: "package-and-upload"
     help: "Package a spaCy pipeline and upload to HuggingFace"
