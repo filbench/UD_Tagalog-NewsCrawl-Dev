@@ -21,6 +21,7 @@ vars:
   model_name: ""
   hf_user: "UD-Filipino"
   treebank_name: ""
+  lang: "tl"
 
 workflows:
   setup:
@@ -380,8 +381,9 @@ commands:
         --merge-subtokens
       - >-
         python -m spacy train
-        configs/config.cfg
+        configs/parser.cfg
         --output training/xlingual-${vars.treebank_name}
+        --nlp.lang ${vars.lang}
         --paths.train corpus/${vars.treebank_name}-train.spacy
         --paths.dev corpus/${vars.treebank_name}-dev.spacy
         --gpu-id ${vars.gpu_id}
