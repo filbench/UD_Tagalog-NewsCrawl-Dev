@@ -8,6 +8,7 @@ directories:
   - "metrics"
   - "metrics/trg"
   - "metrics/ugnayan"
+  - "metrics/xlingual"
   - "pretraining"
   - "training"
   - "vectors"
@@ -19,6 +20,7 @@ vars:
   model_path: ""
   model_name: ""
   hf_user: "UD-Filipino"
+  treebank_name: ""
 
 workflows:
   setup:
@@ -71,6 +73,37 @@ assets:
   - dest: "assets/tlunified_raw_text.txt"
     description: "Pre-converted raw text from TLUnified in JSONL format (1.1 GB)."
     url: "https://storage.googleapis.com/ljvmiranda/calamanCy/tlunified_raw_text.txt"
+    # Cross-lingual experiments
+  - dest: assets/id_gsd-ud-train.conllu
+    description: "Indonesian UD-GSD Treebank Train Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Indonesian-GSD/refs/heads/master/id_gsd-ud-train.conllu
+  - dest: assets/id_gsd-ud-dev.conllu
+    description: "Indonesian UD-GSD Treebank Dev Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Indonesian-GSD/refs/heads/master/id_gsd-ud-dev.conllu
+  - dest: assets/uk_iu-ud-train.conllu
+    description: "Ukrainian UD-IU Treebank Train Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ukrainian-IU/refs/heads/master/uk_iu-ud-train.conllu
+  - dest: assets/uk_iu-ud-dev.conllu
+    description: "Ukrainian UD-IU Treebank Dev Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Ukrainian-IU/refs/heads/master/uk_iu-ud-dev.conllu
+  - dest: assets/ro_rrt-ud-train.conllu
+    description: "Romanian UD-RRT Treebank Train Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Romanian-RRT/refs/heads/master/ro_rrt-ud-train.conllu
+  - dest: assets/ro_rrt-ud-dev.conllu
+    description: "Romanian UD-RRT Treebank Dev Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Romanian-RRT/refs/heads/master/ro_rrt-ud-dev.conllu
+  - dest: assets/vi_vit-ud-train.conllu
+    description: "Vietnamese UD-VIT Treebank Train Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Vietnamese-VIT/refs/heads/master/vi_vit-ud-train.conllu
+  - dest: assets/vi_vit-ud-dev.conllu
+    description: "Vietnamese UD-VIT Treebank Dev Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Vietnamese-VIT/refs/heads/master/vi_vit-ud-dev.conllu
+  - dest: assets/ca_ancora-ud-train.conllu
+    description: "Catalan UD-AnCora Treebank Train Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Catalan-AnCora/refs/heads/master/ca_ancora-ud-train.conllu
+  - dest: assets/ca_ancora-ud-dev.conllu
+    description: "Catalan UD-AnCora Treebank Dev Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Catalan-AnCora/refs/heads/master/ca_ancora-ud-dev.conllu
 
 commands:
   - name: "setup-training-data"
@@ -329,6 +362,42 @@ commands:
     outputs:
       - metrics/ugnayan/${vars.model_name}.json
       - metrics/trg/${vars.model_name}.json
+
+  - name: "train-and-eval-xlingual"
+    help: "Convert a treebank to spaCy format, train, and evaluate on the test set of UD-NewsCrawl"
+    script:
+      - >-
+        python -m spacy convert 
+        assets/${vars.treebank_name}-train.conllu corpus/
+        --converter conllu
+        --morphology
+        --merge-subtokens
+      - >-
+        python -m spacy convert 
+        assets/${vars.treebank_name}-dev.conllu corpus/
+        --converter conllu
+        --morphology
+        --merge-subtokens
+      - >-
+        python -m spacy train
+        configs/config.cfg
+        --output training/xlingual-${vars.treebank_name}
+        --paths.train corpus/${vars.treebank_name}-train.spacy
+        --paths.dev corpus/${vars.treebank_name}-dev.spacy
+        --gpu-id ${vars.gpu_id}
+      - >-
+        python -m spacy evaluate
+        training/xlingual-${vars.treebank_name}/model-best corpus/tl_newscrawl-ud-test.spacy
+        --output metrics/xlingual/${vars.treebank_name}.json
+        --gpu-id ${vars.gpu_id}
+        --per-component
+    deps:
+      - assets/${vars.treebank_name}-train.conllu
+      - assets/${vars.treebank_name}-dev.conllu
+      - corpus/tl_newscrawl-ud-test.spacy
+    outputs:
+      - training/xlingual-${vars.treebank_name}/model-best
+      - metrics/xlingual/${vars.treebank_name}.json
 
   - name: "package-and-upload"
     help: "Package a spaCy pipeline and upload to HuggingFace"
