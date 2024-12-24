@@ -92,12 +92,12 @@ assets:
   - dest: assets/ro_rrt-ud-dev.conllu
     description: "Romanian UD-RRT Treebank Dev Set"
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Romanian-RRT/refs/heads/master/ro_rrt-ud-dev.conllu
-  - dest: assets/vi_vit-ud-train.conllu
-    description: "Vietnamese UD-VIT Treebank Train Set"
-    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Vietnamese-VIT/refs/heads/master/vi_vit-ud-train.conllu
-  - dest: assets/vi_vit-ud-dev.conllu
-    description: "Vietnamese UD-VIT Treebank Dev Set"
-    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Vietnamese-VIT/refs/heads/master/vi_vit-ud-dev.conllu
+  - dest: assets/vi_vtb-ud-train.conllu
+    description: "Vietnamese UD-VTB Treebank Train Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Vietnamese-VTB/refs/heads/master/vi_vtb-ud-train.conllu
+  - dest: assets/vi_vtb-ud-dev.conllu
+    description: "Vietnamese UD-VTB Treebank Dev Set"
+    url: https://raw.githubusercontent.com/UniversalDependencies/UD_Vietnamese-VTB/refs/heads/master/vi_vtb-ud-dev.conllu
   - dest: assets/ca_ancora-ud-train.conllu
     description: "Catalan UD-AnCora Treebank Train Set"
     url: https://raw.githubusercontent.com/UniversalDependencies/UD_Catalan-AnCora/refs/heads/master/ca_ancora-ud-train.conllu
