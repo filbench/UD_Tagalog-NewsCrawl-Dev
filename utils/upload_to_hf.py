@@ -79,6 +79,7 @@ def create_example(sent: conllu.TokenList) -> dict[str, Any]:
     upos_tags: list[str] = []
     feats: list[str] = []
     heads: list[int] = []
+    deprels: list[str] = []
     for token in sent:
         tokens.append(token.get("form"))
         lemmas.append(token.get("lemma"))
@@ -90,6 +91,7 @@ def create_example(sent: conllu.TokenList) -> dict[str, Any]:
             else NONE_IDENTIFIER
         )
         heads.append(token.get("head", ""))
+        deprels.append(token.get("deprel"))
 
     example = {
         "id": id,
@@ -100,6 +102,7 @@ def create_example(sent: conllu.TokenList) -> dict[str, Any]:
         "upos_tags": upos_tags,
         "feats": feats,
         "heads": heads,
+        "deprels": deprels,
     }
     return example
 
