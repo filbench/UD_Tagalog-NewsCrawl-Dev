@@ -30,20 +30,19 @@ ds = load_dataset("UD-Filipino/UD_Tagalog-NewsCrawl")
 ## Training the models
 
 We use the [spaCy projects](https://spacy.io/usage/projects) framework to manage end-to-end training workflows.
-You can train a model by passing a model ID (we'll explain) later to the following command:
+You can train a model by passing a model ID (see table below) later to the following command:
 
 ```sh
 spacy project run setup  # run this once
 spacy project run <MODEL-ID>
 ```
 
-There are six (6) models as outlined in our paper. They are also available in this [HuggingFace collection](https://huggingface.co/collections/UD-Filipino/universal-dependencies-for-tagalog-67573d625baa5036fd59b317):
+There are six (5) models as outlined in our paper. They are also available in this [HuggingFace collection](https://huggingface.co/collections/UD-Filipino/universal-dependencies-for-tagalog-67573d625baa5036fd59b317):
 
 | ID                  | Description                                                                                            |
 |---------------------|--------------------------------------------------------------------------------------------------------|
-| fasttext-graph      | fastText word embeddings on a graph-based parser using UDPipe                                          |
+| baseline-transition | **no word embeddings** on a transition-based parser based on spaCy.                                  |
 | fasttext-transition | fastText word embeddings on a transition-based parser based on spaCy.                                  |
 | hash-transition     | [Multi-hash embeddings](https://arxiv.org/abs/2212.09255) on a transition-based parser based on spaCy. |
-| xling-graph         | XLM-RoBERTa context-sensitive vectors on a graph-based parser using UDPipe                             |
 | xling-transition    | XLM-RoBERTa context-sensitive vectors on a transition-based parser based on spaCy.                     |
 | mono-transition     | RoBERTa-Tagalog context-sensitive vectors on a transition-based parser based on spaCy.                 |
