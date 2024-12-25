@@ -1,6 +1,6 @@
-import os
 import argparse
 import logging
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -8,7 +8,7 @@ from typing import Any
 import conllu
 import pandas as pd
 from conllu import parse_incr
-from datasets import Dataset, Split, DatasetDict
+from datasets import Dataset, DatasetDict, Split
 from spacy.morphology import Morphology
 
 logging.basicConfig(
