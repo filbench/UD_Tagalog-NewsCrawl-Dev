@@ -47,8 +47,6 @@ def main():
     dep_full = update_cols(pd.concat(dep_scores, axis=1))
     print(dep_full.to_latex(float_format="%.2f"))
 
-    breakpoint()
-
 
 def update_cols(df: pd.DataFrame) -> pd.DataFrame:
     df = df[
