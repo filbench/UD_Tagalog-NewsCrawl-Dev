@@ -150,11 +150,11 @@ commands:
       - assets/tl_ugnayan-ud-test.conllu
       - assets/tl_trg-ud-test.conllu
     outputs:
-      - corpus/tl_newscrawl-ud-train.conllu
-      - corpus/tl_newscrawl-ud-dev.conllu
-      - corpus/tl_newscrawl-ud-test.conllu
-      - corpus/tl_ugnayan-ud-test.conllu
-      - corpus/tl_trg-ud-test.conllu
+      - corpus/tl_newscrawl-ud-train.spacy
+      - corpus/tl_newscrawl-ud-dev.spacy
+      - corpus/tl_newscrawl-ud-test.spacy
+      - corpus/tl_ugnayan-ud-test.spacy
+      - corpus/tl_trg-ud-test.spacy
 
   - name: "setup-fasttext-vectors"
     help: "Make fastText vectors spaCy compatible"
