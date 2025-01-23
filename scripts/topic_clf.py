@@ -36,8 +36,8 @@ def get_args():
     infer.add_argument("--output_path", type=Path, default="topics.jsonl", help="Path to save the outputs.")
 
     plot = subparsers.add_parser("plot", help="Plot results.")
-    plot.add_argument("--output_path", type=Path, default="topic_clf.pdf", help="Path to save the PDF plot")
-    plot.add_argument("--figsize", type=int, nargs=2, default=[10, 10], help="Matplotlib figure size.")
+    plot.add_argument("--output_path", type=Path, default="plots/topic_clf.pdf", help="Path to save the PDF plot")
+    plot.add_argument("--figsize", type=int, nargs=2, default=[8, 8], help="Matplotlib figure size.")
 
     # fmt: on
     return parser.parse_args()
@@ -130,7 +130,6 @@ Answer:
 
 
 def plot(output_path: Path, figsize: tuple[int, int]):
-    breakpoint()
     categories = [
         "entertainment",
         "health",
@@ -149,6 +148,30 @@ def plot(output_path: Path, figsize: tuple[int, int]):
         2.829936,
         0.818133,
     ]
+
+    fig, ax = plt.subplots(figsize=figsize)
+    bars = ax.bar(categories, percentages, color="gray", edgecolor="k")
+
+    for bar, pct in zip(bars, percentages):
+        height = bar.get_height()
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            height,
+            f"{pct:.2f}\%",
+            ha="center",
+            va="bottom",
+            fontsize=22,
+        )
+
+    # ax.set_xlabel("Topics")
+    ax.set_ylabel("Percentage in UD-NewsCrawl")
+    ax.set_xticks(range(len(categories)))
+    ax.set_xticklabels(categories, rotation=45, ha="right")
+    ax.set_ylim([0, 40])
+
+    # Save and show plot
+    fig.tight_layout()
+    fig.savefig(output_path, bbox_inches="tight")
 
 
 if __name__ == "__main__":
