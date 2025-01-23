@@ -2,8 +2,26 @@ import argparse
 import logging
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 from datasets import load_dataset
 from vllm import LLM, SamplingParams, RequestOutput
+
+FONT_SIZES = {"small": 14, "medium": 18, "large": 24}
+
+PLOT_PARAMS = {
+    "font.family": "serif",
+    "font.serif": ["Times"],
+    "font.size": FONT_SIZES.get("medium"),
+    "axes.titlesize": FONT_SIZES.get("large"),
+    "axes.labelsize": FONT_SIZES.get("large"),
+    "xtick.labelsize": FONT_SIZES.get("large"),
+    "ytick.labelsize": FONT_SIZES.get("large"),
+    "legend.fontsize": FONT_SIZES.get("medium"),
+    "figure.titlesize": FONT_SIZES.get("medium"),
+    "text.usetex": True,
+}
+
+plt.rcParams.update(PLOT_PARAMS)
 
 
 def get_args():
@@ -27,21 +45,36 @@ def get_args():
 
 def main():
     args = get_args()
+    if args.command == "infer":
+        infer(
+            dataset_name=args.dataset_name,
+            model_name=args.model_name,
+            batch_size=args.batch_size,
+            output_path=args.output_path,
+        )
+    elif args.command == "plot":
+        plot(output_path=args.output_path, figsize=args.figsize)
+    else:
+        logging.error(f"Unknown command: '{args.command}'")
+        raise
+
+
+def infer(dataset_name: str, model_name: str, output_path: Path, batch_size: int):
     logging.info(f"Downloading dataset {args.dataset_name}")
     texts = []
     for split in ("train", "test", "validation"):
-        df = load_dataset(args.dataset_name, split=split).to_pandas()
+        df = load_dataset(dataset_name, split=split).to_pandas()
         texts.extend(df["text"].to_list())
 
     prompts = [format_prompt(text) for text in texts]
 
     # Set-up vLLM
     llm = LLM(
-        model=args.model_name,
-        tokenizer=args.model_name,
+        model=model_name,
+        tokenizer=model_name,
         dtype="auto",
         tokenizer_mode="auto",
-        max_num_seqs=args.batch_size,
+        max_num_seqs=batch_size,
         trust_remote_code=True,
     )
     sampling_params = SamplingParams(n=1, temperature=0.1, max_tokens=100)
@@ -94,6 +127,28 @@ Text: {text}
 Answer:
 """
     return template.format(text=text)
+
+
+def plot(output_path: Path, figsize: tuple[int, int]):
+    breakpoint()
+    categories = [
+        "entertainment",
+        "health",
+        "sports",
+        "politics",
+        "travel",
+        "geography",
+        "science/technology",
+    ]
+    percentages = [
+        36.688573,
+        25.637071,
+        17.509388,
+        13.324839,
+        3.192060,
+        2.829936,
+        0.818133,
+    ]
 
 
 if __name__ == "__main__":
