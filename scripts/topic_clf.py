@@ -7,12 +7,20 @@ from vllm import LLM, SamplingParams, RequestOutput
 
 
 def get_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
+    subparsers = parser.add_subparsers(dest="command")
+
     # fmt: off
-    parser.add_argument("--dataset_name", type=str, default="UD-Filipino/UD_Tagalog-NewsCrawl")
-    parser.add_argument("--model_name", type=str, default="meta-llama/Llama-3.1-8B-Instruct")
-    parser.add_argument("--batch_size", type=int, default=128, help="Set the batch size.")
-    parser.add_argument("--output_path", type=Path, default="topics.jsonl", help="Path to save the outputs.")
+    infer = subparsers.add_parser("infer", help="Perform topic classification")
+    infer.add_argument("--dataset_name", type=str, default="UD-Filipino/UD_Tagalog-NewsCrawl")
+    infer.add_argument("--model_name", type=str, default="meta-llama/Llama-3.1-8B-Instruct")
+    infer.add_argument("--batch_size", type=int, default=128, help="Set the batch size.")
+    infer.add_argument("--output_path", type=Path, default="topics.jsonl", help="Path to save the outputs.")
+
+    plot = subparsers.add_parser("plot", help="Plot results.")
+    plot.add_argument("--output_path", type=Path, default="topic_clf.pdf", help="Path to save the PDF plot")
+    plot.add_argument("--figsize", type=int, nargs=2, default=[10, 10], help="Matplotlib figure size.")
+
     # fmt: on
     return parser.parse_args()
 
