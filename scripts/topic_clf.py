@@ -39,6 +39,11 @@ def get_args():
     plot.add_argument("--output_path", type=Path, default="plots/topic_clf.pdf", help="Path to save the PDF plot")
     plot.add_argument("--figsize", type=int, nargs=2, default=[8, 8], help="Matplotlib figure size.")
 
+    nomic = subparsers.add_parser("nomic", help="Plot Nomic Atlas results.")
+    nomic.add_argument("--input_path", type=Path, default="assets/UD_Tagalog-NewsCrawl_250212-131331.csv", help="Path to read the coordinates.")
+    nomic.add_argument("--output_path", type=Path, default="plots/nomic_topic_clf.pdf", help="Path to save the PDF plot")
+    nomic.add_argument("--figsize", type=int, nargs=2, default=[8, 8], help="Matplotlib figure size.")
+
     # fmt: on
     return parser.parse_args()
 
@@ -54,6 +59,12 @@ def main():
         )
     elif args.command == "plot":
         plot(output_path=args.output_path, figsize=args.figsize)
+    elif args.command == "nomic":
+        nomic(
+            input_path=args.input_path,
+            output_path=args.output_path,
+            figsize=args.figsize,
+        )
     else:
         logging.error(f"Unknown command: '{args.command}'")
         raise
