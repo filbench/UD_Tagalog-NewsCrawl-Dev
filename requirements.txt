@@ -11,3 +11,5 @@ build
 pip==22.0.2
 sentencepiece
 protobuf
+vllm
+matplotlib
