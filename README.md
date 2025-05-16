@@ -2,7 +2,8 @@
 
 # UD_Tagalog-NewsCrawl (Dev)
 
-This repository contains several experiments and benchmarks for the paper [_UD-NewsCrawl: A Universal Dependencies Treebank for Tagalog_]() which introduces [UD_Tagalog-NewsCrawl](https://huggingface.co/datasets/UD-Filipino/UD_Tagalog-NewsCrawl), the largest Tagalog treebank to date.
+This repository contains several experiments and benchmarks for the ACL 2025 (Main) paper [*The UD-NewsCrawl Treebank: Reflections and Challenges from a
+Large-scale Tagalog Syntactic Annotation Project*]() which introduces [UD_Tagalog-NewsCrawl](https://huggingface.co/datasets/UD-Filipino/UD_Tagalog-NewsCrawl), the largest Tagalog treebank to date.
 
 
 
