@@ -2,9 +2,14 @@ import argparse
 import logging
 from pathlib import Path
 
+import pandas as pd
 import matplotlib.pyplot as plt
 from datasets import load_dataset
-from vllm import LLM, SamplingParams, RequestOutput
+
+try:
+    from vllm import LLM, SamplingParams, RequestOutput
+except ModuleNotFoundError:
+    print("vLLM installation incomplete!")
 
 FONT_SIZES = {"small": 14, "medium": 18, "large": 24}
 
@@ -68,6 +73,14 @@ def main():
     else:
         logging.error(f"Unknown command: '{args.command}'")
         raise
+
+
+def nomic(input_path: Path, output_path: Path, figsize: tuple[int, int]):
+    df = pd.read_csv(input_path).rename(
+        columns={"Nomic Topic: broad": "topic", "Y_position": "y", "X_position": "x"}
+    )
+    breakpoint()
+    pass
 
 
 def infer(dataset_name: str, model_name: str, output_path: Path, batch_size: int):
