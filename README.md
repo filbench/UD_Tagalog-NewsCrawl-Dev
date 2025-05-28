@@ -7,7 +7,7 @@
 |
 <b><a href="https://huggingface.co/collections/UD-Filipino/universal-dependencies-for-tagalog-67573d625baa5036fd59b317">🤗 Baselines</a></b>
 |
-<b><a href="">📄 Paper</a></b>
+<b><a href="https://arxiv.org/abs/2505.20428">📄 Paper</a></b>
 </p>
 
 This repository contains several experiments and benchmarks for the ACL 2025 (Main) paper [*The UD-NewsCrawl Treebank: Reflections and Challenges from a
