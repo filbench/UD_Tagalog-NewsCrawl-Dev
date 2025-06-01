@@ -11,9 +11,11 @@
 </p>
 
 This repository contains several experiments and benchmarks for the ACL 2025 (Main) paper [*The UD-NewsCrawl Treebank: Reflections and Challenges from a
-Large-scale Tagalog Syntactic Annotation Project*]() which introduces [UD_Tagalog-NewsCrawl](https://huggingface.co/datasets/UD-Filipino/UD_Tagalog-NewsCrawl), the largest Tagalog treebank to date.
+Large-scale Tagalog Syntactic Annotation Project*](https://arxiv.org/abs/2505.20428) which introduces [UD_Tagalog-NewsCrawl](https://huggingface.co/datasets/UD-Filipino/UD_Tagalog-NewsCrawl), the largest Tagalog treebank to date.
 
+## News
 
+- [2025-05-15] The UD-NewsCrawl Treebank was accepted at the ACL 2025 (Main) Conference!
 
 ## Set-up
 
@@ -55,3 +57,16 @@ There are six (5) models as outlined in our paper. They are also available in th
 | hash-transition     | [Multi-hash embeddings](https://arxiv.org/abs/2212.09255) on a transition-based parser based on spaCy. |
 | xling-transition    | XLM-RoBERTa context-sensitive vectors on a transition-based parser based on spaCy.                     |
 | mono-transition     | RoBERTa-Tagalog context-sensitive vectors on a transition-based parser based on spaCy.                 |
+
+## Cite
+
+If you're using the UD-NewsCrawl treebank for your project, please cite:
+
+```
+@article{udnewscrawl,
+  title={The UD-NewsCrawl Treebank: Reflections and Challenges from a Large-scale Tagalog Syntactic Annotation Project},
+  author={Aquino, Angelina A. and Miranda, Lester James V. and Or, Elsie Marie T.},
+  journal={arXiv preprint arXiv:2505.20428},
+  year={2025}
+}
+```
