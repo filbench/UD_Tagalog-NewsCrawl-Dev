@@ -63,10 +63,23 @@ There are six (5) models as outlined in our paper. They are also available in th
 If you're using the UD-NewsCrawl treebank for your project, please cite:
 
 ```
-@article{udnewscrawl,
-  title={The UD-NewsCrawl Treebank: Reflections and Challenges from a Large-scale Tagalog Syntactic Annotation Project},
-  author={Aquino, Angelina A. and Miranda, Lester James V. and Or, Elsie Marie T.},
-  journal={arXiv preprint arXiv:2505.20428},
-  year={2025}
+@inproceedings{aquino-etal-2025-ud,
+    title = "The {UD}-{N}ews{C}rawl Treebank: Reflections and Challenges from a Large-scale {T}agalog Syntactic Annotation Project",
+    author = "Aquino, Angelina Aspra  and
+      Miranda, Lester James Validad  and
+      Or, Elsie Marie T.",
+    editor = "Che, Wanxiang  and
+      Nabende, Joyce  and
+      Shutova, Ekaterina  and
+      Pilehvar, Mohammad Taher",
+    booktitle = "Proceedings of the 63rd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)",
+    month = jul,
+    year = "2025",
+    address = "Vienna, Austria",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2025.acl-long.357/",
+    pages = "7219--7239",
+    ISBN = "979-8-89176-251-0",
+    abstract = "This paper presents UD-NewsCrawl, the largest Tagalog treebank to date, containing 15.6k trees manually annotated according tothe Universal Dependencies framework. We detail our treebank development process, including data collection, pre-processing, manual annotation, and quality assurance procedures. We provide baseline evaluations using multiple transformer-based models to assess the performance of state-of-the-art dependency parsers on Tagalog. We also highlight challenges in the syntactic analysis of Tagalog given its distinctive grammatical properties, and discuss its implications for the annotation of this treebank. We anticipate that UD-NewsCrawl and our baseline model implementations will serve as valuable resources for advancing computational linguistics research in underrepresented languages like Tagalog."
 }
 ```
